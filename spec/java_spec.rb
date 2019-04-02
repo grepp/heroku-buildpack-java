@@ -60,7 +60,7 @@ describe "Java" do
 
             expect(successful_body(app)).to eq("/1")
 
-            expect(app.run("echo \$JAVA_OPTS")).
+            expect(app.run('echo \$JAVA_OPTS')).
                 to include(%q{-Xmx300m -Xss512k})
 
             sleep 1
