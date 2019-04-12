@@ -15,8 +15,12 @@ install_maven() {
 
   status_pending "Installing Maven ${mavenVersion}"
   if is_supported_maven_version ${mavenVersion}; then
-    mavenUrl="https://lang-jvm.s3.amazonaws.com/maven-${mavenVersion}.tar.gz"
-    download_maven ${mavenUrl} ${installDir} ${mavenHome}
+    # mavenUrl="https://lang-jvm.s3.amazonaws.com/maven-${mavenVersion}.tar.gz"
+    # download_maven ${mavenUrl} ${installDir} ${mavenHome}
+    mavenPath="/tmp/binaries/maven-3.3.9.tar.gz"
+    rm -rf ${mavenHome}
+    tar xzmf /tmp/binaries/maven-${mavenVersion}.tar.gz -C $installDir
+    chmod +x $mavenHome/bin/mvn
     status_done
   else
     error_return "Error, you have defined an unsupported Maven version in the system.properties file.
@@ -37,14 +41,6 @@ download_maven() {
 is_supported_maven_version() {
   local mavenVersion=${1}
   if [ "$mavenVersion" = "$DEFAULT_MAVEN_VERSION" ]; then
-    return 0
-  elif [ "$mavenVersion" = "3.2.5" ]; then
-    return 0
-  elif [ "$mavenVersion" = "3.2.3" ]; then
-    return 0
-  elif [ "$mavenVersion" = "3.1.1" ]; then
-    return 0
-  elif [ "$mavenVersion" = "3.0.5" ]; then
     return 0
   else
     return 1
@@ -93,9 +89,9 @@ install_jdk() {
   local cache_dir=${2}
 
   let start=$(nowms)
-  JVM_COMMON_BUILDPACK=${JVM_COMMON_BUILDPACK:-https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/jvm.tgz}
-  mkdir -p /tmp/jvm-common
-  curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common --strip-components=1
+  # JVM_COMMON_BUILDPACK=${JVM_COMMON_BUILDPACK:-https://buildpack-registry.s3.amazonaws.com/buildpacks/heroku/jvm.tgz}
+  # mkdir -p /tmp/jvm-common
+  # curl --retry 3 --silent --location $JVM_COMMON_BUILDPACK | tar xzm -C /tmp/jvm-common --strip-components=1
   source /tmp/jvm-common/bin/util
   source /tmp/jvm-common/bin/java
   source /tmp/jvm-common/opt/jdbc.sh
